@@ -1,5 +1,6 @@
-const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const mongoose = require('mongoose');
+const connectDB = require('../config/database');
 const User = require('../models/User');
 const Library = require('../models/Library');
 
@@ -7,15 +8,13 @@ const Library = require('../models/Library');
 dotenv.config();
 
 // Connect to database
-mongoose.connect(process.env.MONGODB_URI)
-.then(() => console.log('MongoDB connected for seeding'))
-.catch(err => {
-  console.error('MongoDB connection error:', err);
-  process.exit(1);
-});
+connectDB();
 
 const seedTestData = async () => {
   try {
+    // Wait a moment for connection to establish
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
     console.log('🌱 Seeding test data...\n');
 
     // Create test users

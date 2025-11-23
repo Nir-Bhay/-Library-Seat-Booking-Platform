@@ -111,6 +111,17 @@ librarySchema.pre('save', function(next) {
   next();
 });
 
+// Method to calculate available seats for a specific date
+librarySchema.methods.getAvailableSeatsForDate = async function(date) {
+  const Booking = require('./Booking');
+  const confirmedBookings = await Booking.countDocuments({
+    library_id: this._id,
+    bookingDate: date,
+    bookingStatus: { $in: ['confirmed', 'pending'] }
+  });
+  return this.totalSeats - confirmedBookings;
+};
+
 // Create index for search
 librarySchema.index({ libraryName: 'text', 'address.city': 'text', 'address.area': 'text' });
 
