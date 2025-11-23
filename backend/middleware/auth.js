@@ -5,6 +5,13 @@ const User = require('../models/User');
 exports.protect = async (req, res, next) => {
   let token;
 
+  if (!process.env.JWT_SECRET) {
+    return res.status(500).json({
+      success: false,
+      error: 'JWT secret not configured'
+    });
+  }
+
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     token = req.headers.authorization.split(' ')[1];
   }

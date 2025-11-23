@@ -56,10 +56,7 @@ const librarySchema = new mongoose.Schema({
     min: 1
   },
   availableSeats: {
-    type: Number,
-    default: function() {
-      return this.totalSeats;
-    }
+    type: Number
   },
   pricePerHour: {
     type: Number,
@@ -104,6 +101,14 @@ const librarySchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   }
+});
+
+// Set availableSeats on creation
+librarySchema.pre('save', function(next) {
+  if (this.isNew && this.availableSeats === undefined) {
+    this.availableSeats = this.totalSeats;
+  }
+  next();
 });
 
 // Create index for search

@@ -114,6 +114,12 @@ exports.webhook = async (req, res, next) => {
   try {
     const secret = process.env.RAZORPAY_WEBHOOK_SECRET;
     
+    if (!secret) {
+      return res.status(500).json({ 
+        error: 'Webhook secret not configured' 
+      });
+    }
+    
     const shasum = crypto.createHmac('sha256', secret);
     shasum.update(JSON.stringify(req.body));
     const digest = shasum.digest('hex');

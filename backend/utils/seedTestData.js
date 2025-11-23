@@ -148,9 +148,11 @@ const seedTestData = async () => {
     console.log('- Librarian: librarian@test.com / Librarian@123');
     console.log('- Admin: admin@librarybooking.com / Admin@123456\n');
 
+    await mongoose.connection.close();
     process.exit(0);
   } catch (error) {
     console.error('❌ Error seeding test data:', error);
+    await mongoose.connection.close();
     process.exit(1);
   }
 };

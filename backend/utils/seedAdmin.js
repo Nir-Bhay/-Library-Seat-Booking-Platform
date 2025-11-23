@@ -37,9 +37,11 @@ const seedAdmin = async () => {
     console.log('Password: Admin@123456');
     console.log('⚠️  Please change the password after first login!');
 
+    await mongoose.connection.close();
     process.exit(0);
   } catch (error) {
     console.error('Error seeding admin:', error);
+    await mongoose.connection.close();
     process.exit(1);
   }
 };
